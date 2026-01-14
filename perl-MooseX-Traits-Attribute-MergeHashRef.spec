@@ -8,7 +8,7 @@ Summary:	Moose::Meta::Attribute::Custom::Trait::MergeHashRef
 #Summary(pl.UTF-8):
 Name:		perl-MooseX-Traits-Attribute-MergeHashRef
 Version:	1.000
-Release:	3
+Release:	4
 License:	bsd
 Group:		Development/Languages/Perl
 Source0:	http://search.cpan.org/CPAN/authors/id/P/PE/PERLER/MooseX-Traits-Attribute-MergeHashRef-%{version}.tar.gz
