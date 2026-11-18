@@ -1,0 +1,17 @@
+# Moose 2: the clearer default ran before the attribute name was set, so no clear_NAME was installed
+--- a/lib/Moose/Meta/Attribute/Custom/Trait/MergeHashRef.pm	2011-03-14 17:43:53.000000000 +0100
++++ b/lib/Moose/Meta/Attribute/Custom/Trait/MergeHashRef.pm	2026-11-19 00:48:16.760961605 +0100
+@@ -14,7 +14,12 @@
+ use Moose::Role;
+ use MooseX::Traits::Attribute::MergeHashRef;
+ 
+-has 'clearer' => (is => 'rw', default => sub { 'clear_' . $_[0]->name } );
++# the attribute name is not yet set when a default for 'clearer' is built
++around _process_options => sub {
++    my ( $orig, $class, $name, $options ) = @_;
++    $options->{clearer} = 'clear_' . $name unless defined $options->{clearer};
++    return $class->$orig( $name, $options );
++};
+ 
+ sub accessor_metaclass { 'MooseX::Traits::Attribute::MergeHashRef' }
+ 

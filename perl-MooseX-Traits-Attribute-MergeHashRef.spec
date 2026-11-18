@@ -7,20 +7,22 @@
 Summary:	Moose::Meta::Attribute::Custom::Trait::MergeHashRef
 #Summary(pl.UTF-8):
 Name:		perl-MooseX-Traits-Attribute-MergeHashRef
-Version:	1.000
-Release:	4
+Version:	1.002
+Release:	1
 License:	bsd
 Group:		Development/Languages/Perl
-Source0:	http://search.cpan.org/CPAN/authors/id/P/PE/PERLER/MooseX-Traits-Attribute-MergeHashRef-%{version}.tar.gz
-# Source0-md5:	631514d096b5ee38bbe44719641765d2
+Source0:	https://www.cpan.org/authors/id/P/PE/PERLER/MooseX-Traits-Attribute-MergeHashRef-%{version}.tar.gz
+# Source0-md5:	0ceade0624acff9f7a4663adb45cf155
+Patch0:		%{name}-moose2.patch
 URL:		http://search.cpan.org/dist/MooseX-Traits-Attribute-MergeHashRef/
+BuildRequires:	perl-Module-Build >= 0.3601
 BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	rpm-perlprov >= 4.1-13
 %if %{with tests}
-BuildRequires:	perl-File-Find-Rule
 BuildRequires:	perl-Hash-Merge
 BuildRequires:	perl-Moose
 BuildRequires:	perl-Test-Simple >= 0.92
+BuildRequires:	perl-Try-Tiny
 %endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -33,19 +35,20 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %prep
 %setup -q -n %{pdir}-%{pnam}-%{version}
+%patch -P 0 -p1
 
 %build
-%{__perl} Makefile.PL \
-	INSTALLDIRS=vendor
-%{__make}
+%{__perl} Build.PL \
+	installdirs=vendor
+./Build
 
-%{?with_tests:%{__make} test}
+%{?with_tests:./Build test}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} pure_install \
-	DESTDIR=$RPM_BUILD_ROOT
+./Build install \
+	destdir=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
